@@ -90,7 +90,7 @@ if(String(keytemp) === String(keyx)){
             "Content-Range": `bytes ${start}-${end}/${videoSize}`,
             "Accept-Ranges": "bytes",
             "Content-Length": contentLength,
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": "video/mp4",
         });
     
         console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
