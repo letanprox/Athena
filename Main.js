@@ -52,8 +52,10 @@ if(String(keytemp) === String(keyx)){
         else if(durvideo > 30 && durvideo <= 60) CHUNK_SIZE = 1000*1000*2;
         else if(durvideo > 60 && durvideo <= 90) CHUNK_SIZE = 1000*1000*3;
         else CHUNK_SIZE = 1000*1000*4;
+
         if(durvideo == -1){
             if(String(nameFile.includes('tap'))) CHUNK_SIZE = 1000*1000*2;
+            else CHUNK_SIZE = 1000*1000*4;
         }
         
         let xstart;
