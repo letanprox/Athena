@@ -1,0 +1,185 @@
+const http = require("http");
+const fs = require("fs");
+const {google} = require('googleapis');
+let MongoClient = require('mongodb').MongoClient;
+let urli = "mongodb://localhost:27017/";
+
+let keyx = 'khonglammamuoncoanthichicoandaubuoiancut';
+MongoClient.connect(urli , { useUnifiedTopology: true } ,async function(err, db) {
+http.createServer(async function (req, response) {
+  if (err) throw err;
+
+  let firstrl = String(String(req.url).replace('/', '').replace(' ','')).split('/');
+  let keytemp = String(firstrl[0]);
+  let nameFile = String(firstrl[1]);
+
+if(String(keytemp) === String(keyx)){
+    let dbo = await db.db("roxydb");
+        dbo = await dbo.collection("danh_sach_drivelist");
+    let query = {name:nameFile};
+    let select = await dbo.find(query).project({_id:0,name:0}).toArray();
+
+    if(select.length >= 1){
+    let index = select[0].index;
+    let fileId = select[0].id;
+    let videoSize = select[0].size;
+    let durvideo = select[0].durvideo;
+
+    dbo = await db.db("aidb");
+    dbo = await dbo.collection("danh_sach_driveapi");
+
+    query = { index: Number(index)};
+    select = await dbo.find(query).toArray();
+        access_token = select[0].access_token;
+        let oAuth2Client = new google.auth.OAuth2();
+            oAuth2Client.setCredentials({
+            access_token:access_token,
+            scope: 'https://www.googleapis.com/auth/drive',
+        });
+    let drive = google.drive({version: 'v3', auth:oAuth2Client});
+
+    let range = req.headers.range;
+    if(!range) range = 'bytes=0-';
+
+    const parts = range.replace(/bytes=/, "").split("-");
+    if(parts[1]){
+        console.log('-----------------');
+        console.log('ios');
+        console.log('Range first - '+range);
+
+        let CHUNK_SIZE;
+        if(durvideo <= 30) CHUNK_SIZE = 1000*1000*1;
+        else if(durvideo > 30 && durvideo <= 60) CHUNK_SIZE = 1000*1000*2;
+        else if(durvideo > 60 && durvideo <= 90) CHUNK_SIZE = 1000*1000*3;
+        else CHUNK_SIZE = 1000*1000*4;
+        if(durvideo == -1){
+            if(String(nameFile.includes('tap'))) CHUNK_SIZE = 1000*1000*2;
+        }
+        
+        let xstart;
+        let xend;
+        let start;
+        let end;
+        if(!range.includes('=0-1')){
+            xstart = String(parseInt(parts[0], 10));
+                xstart = Number(xstart.substring(0,Number(xstart.length)-6));
+            xend = (Number(xstart)+1)
+                if(xstart >= 1) xstart = xstart*CHUNK_SIZE+1;
+                else xstart == 0;
+                xend = xend*CHUNK_SIZE;
+    
+            start = parseInt(parts[0], 10);
+            const rangend = videoSize - CHUNK_SIZE - 1;
+            if(xend > rangend && xend < videoSize) end = videoSize - 1;
+            else end = Math.min(xend, videoSize - 1);
+        }else{
+            xstart = 0;
+            xend = 0;
+            start = 0;
+            end = 1;
+        }
+        
+        const contentLength = end - start + 1;
+        response.writeHead(206, { 
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': 'true',
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Expose-Headers': '*',
+            "Content-Range": `bytes ${start}-${end}/${videoSize}`,
+            "Accept-Ranges": "bytes",
+            "Content-Length": contentLength,
+            "Content-Type": "video/mp4",
+        });
+    
+        console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
+    
+        let check = false;
+        if (fs.existsSync('Cache/'+nameFile+'Range' + 'bytes='+start+'-'+end) && (Number(start) == Number(xstart))){
+          let filesize = fs.statSync('Cache/'+nameFile+'Range' + 'bytes='+start+'-'+end);
+          if(start != 0 && end != CHUNK_SIZE) if(Number(filesize.size) >= CHUNK_SIZE - 2 && Number(filesize.size) <= CHUNK_SIZE + 2) check = true;
+        } 
+    
+        if(check == false){
+            console.log('create');
+            let dest;
+            if(Number(start) == Number(xstart)) dest = fs.createWriteStream('Cache/'+nameFile+'Range' + 'bytes='+start+'-'+end);
+            drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+start+'-'+end, connection: 'keep-alive'}}, {responseType: 'stream'},
+                function(err, res){
+                    res.data.pipe(response);
+                    if(Number(start) == Number(xstart)) res.data.pipe(dest);
+                }
+            );
+        }else{
+            console.log('loadcache')
+            fs.createReadStream('Cache/'+nameFile+'Range' + 'bytes='+start+'-'+end).pipe(response); 
+        }
+
+    }else{
+        console.log('-----------------');
+        console.log('android');
+
+        console.log('Range first - '+range);
+        const CHUNK_SIZE = 1000*1000*1;
+    
+        let xstart = String(range.replace(/\D/g, ""));
+            xstart = Number(xstart.substring(0,Number(xstart.length)-6));
+        let xend = (Number(xstart)+1)
+            if(xstart >= 1) xstart = xstart*CHUNK_SIZE+1;
+            else xstart == 0;
+            xend = xend*CHUNK_SIZE;
+    
+        const start = Number(String(range.replace(/\D/g, "")));
+        const rangend = videoSize - CHUNK_SIZE - 1;
+        let end;
+        if(xend > rangend && xend < videoSize) end = videoSize - 1;
+        else end = Math.min(xend, videoSize - 1);
+        
+    
+        const contentLength = end - start + 1;
+        response.writeHead(206, { 
+        "Content-Range": `bytes ${start}-${end}/${videoSize}`,
+        "Accept-Ranges": "bytes",
+        "Content-Length": contentLength,
+        "Content-Type": "video/mp4",
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Expose-Headers': '*',
+        });
+    
+        console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
+    
+        let check = false;
+        if (fs.existsSync('Cache/'+nameFile+'Range' + 'bytes='+start+'-'+end) && (Number(start) == Number(xstart))){
+          let filesize = fs.statSync('Cache/'+nameFile+'Range' + 'bytes='+start+'-'+end);
+          if(start != 0 && end != CHUNK_SIZE) if(Number(filesize.size) >= CHUNK_SIZE - 2 && Number(filesize.size) <= CHUNK_SIZE + 2) check = true;
+        } 
+    
+        if(check == false){
+            console.log('create');
+            let dest;
+            if(Number(start) == Number(xstart)) dest = fs.createWriteStream('Cache/'+nameFile+'Range' + 'bytes='+start+'-'+end);
+            drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+start+'-'+end, connection: 'keep-alive'}}, {responseType: 'stream'},
+                function(err, res){
+                    res.data.pipe(response);
+                    if(Number(start) == Number(xstart)) res.data.pipe(dest);
+                }
+            );
+        }else{
+            console.log('loadcache')
+            fs.createReadStream('Cache/'+nameFile+'Range' + 'bytes='+start+'-'+end).pipe(response); 
+        }
+    }
+
+    }else{
+        response.writeHead(401);
+        response.write('not find resource');
+        response.end();
+    }
+}else{
+    response.writeHead(401);
+    response.write('can key deload');
+    response.end();
+}
+}).listen(1000);
+});
