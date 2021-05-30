@@ -11,7 +11,6 @@ MongoClient.connect(urli , { useUnifiedTopology: true } ,async function(err, db)
 http.createServer(async function (req, response) {
   if (err) throw err;
 
-  console.log('conect toi tao di');
   console.log(req.url);
 
   let firstrl = String(String(req.url).replace('/', '').replace(' ','')).split('/');
@@ -30,8 +29,6 @@ if(String(keytemp) === String(keyx)){
     let index = select[0].index;
     let fileId = select[0].id;
     let videoSize = select[0].size;
-
-    console.log('vo key roi ne con di');
 
     dbo = await db.db("aidb");
     dbo = await dbo.collection("danh_sach_driveapi");
