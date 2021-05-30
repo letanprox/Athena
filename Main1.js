@@ -107,6 +107,7 @@ if(String(keytemp) === String(keyx)){
 
             if(check == false){
                 console.log('create');
+                console.log(kstart + '-' + kend)
                 let dest;
                 if(Number(start) != Number(kstart) && Number(end) != Number(kend)) dest = fs.createWriteStream('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
                 
