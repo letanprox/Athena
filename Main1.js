@@ -66,81 +66,87 @@ if(String(keytemp) === String(keyx)){
 
         console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
 
-        let exit = true;
-        req.on("close", function(err) {
-            exit = false;
-        });
-
-        const CHUNK_SIZE = 1000*1000*1;
-        let xstart;
-        let kstart;
-        let kend;
-
-        if(!range.includes('=0-1')){
-            xstart = String(start);
-            xstart = Number(xstart.substring(0,Number(xstart.length)-6));
-            xstart = (xstart+1)*CHUNK_SIZE;
-            kstart = start;
-            kend = xstart;
-        }else{
-            xstart = 0;
-            start = 0;
-            end = 1;
-            kstart = 0;
-            kend = 1;
-        }
- 
-        function enGine(){
-            let check = false;
-            if (fs.existsSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend)){
-              let filesize = fs.statSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
-              if(Number(filesize.size) >= CHUNK_SIZE - 2 && Number(filesize.size) <= CHUNK_SIZE + 2) check = true;
-            } 
-
-            if(check == false){
-                console.log('create');
-                let dest;
-                if(Number(start) != Number(kstart) && Number(end) != Number(kend)) dest = fs.createWriteStream('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
-                
-                drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+kstart+'-'+kend, connection: 'keep-alive'}}, {responseType: 'stream'},
-                    function(err, res){
-                        res.data.on('data', function(chunk){
-                            if(exit == true) response.write(chunk);
-                            else response.end();
-                        });
-                        res.data.on('end', function(){
-                            if(exit == true){
-                                if(kend < end){
-                                    kstart = Math.min(kend + 1 , end);
-                                    kend = Math.min(kstart + CHUNK_SIZE -1, end);
-                                    if(kstart != kend) enGine();
-                                    else response.end();
-                                }else response.end();
-                            }else response.end();                    
-                        });                    
-                        if(Number(start) != Number(kstart) && Number(end) != Number(kend)) res.data.pipe(dest);
-                    }
-                );
-            }else{
-                console.log('loadcache')
-                let readstream = fs.createReadStream('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
-                readstream.on('data', function (chunk) {
-                    if(exit == true) response.write(chunk);
-                    else response.end();
-                }); 
-                readstream.on('end', function () {
-                    if(exit == true){
-                        if(kend < end){
-                            kstart = Math.min(kend + 1 , end);
-                            kend = Math.min(kstart + CHUNK_SIZE - 1, end);
-                            if(kstart != kend) enGine();
-                            else response.end();
-                        }else response.end();
-                    }else response.end();  
-                }); 
+        drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+start+'-'+end, connection: 'keep-alive'}}, {responseType: 'stream'},
+            function(err, res){
+                res.data.pipe(response);
             }
-        }
-        enGine();
+        );
+
+        // let exit = true;
+        // req.on("close", function(err) {
+        //     exit = false;
+        // });
+
+        // const CHUNK_SIZE = 1000*1000*1;
+        // let xstart;
+        // let kstart;
+        // let kend;
+        // 
+        // if(!range.includes('=0-1')){
+        //     xstart = String(start);
+        //     xstart = Number(xstart.substring(0,Number(xstart.length)-6));
+        //     xstart = (xstart+1)*CHUNK_SIZE;
+        //     kstart = start;
+        //     kend = xstart;
+        // }else{
+        //     xstart = 0;
+        //     start = 0;
+        //     end = 1;
+        //     kstart = 0;
+        //     kend = 1;
+        // }
+ 
+        // function enGine(){
+        //     let check = false;
+        //     if (fs.existsSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend)){
+        //       let filesize = fs.statSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
+        //       if(Number(filesize.size) >= CHUNK_SIZE - 2 && Number(filesize.size) <= CHUNK_SIZE + 2) check = true;
+        //     } 
+
+        //     if(check == false){
+        //         console.log('create');
+        //         let dest;
+        //         if(Number(start) != Number(kstart) && Number(end) != Number(kend)) dest = fs.createWriteStream('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
+                
+        //         drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+kstart+'-'+kend, connection: 'keep-alive'}}, {responseType: 'stream'},
+        //             function(err, res){
+        //                 res.data.on('data', function(chunk){
+        //                     if(exit == true) response.write(chunk);
+        //                     else response.end();
+        //                 });
+        //                 res.data.on('end', function(){
+        //                     if(exit == true){
+        //                         if(kend < end){
+        //                             kstart = Math.min(kend + 1 , end);
+        //                             kend = Math.min(kstart + CHUNK_SIZE -1, end);
+        //                             if(kstart != kend) enGine();
+        //                             else response.end();
+        //                         }else response.end();
+        //                     }else response.end();                    
+        //                 });                    
+        //                 if(Number(start) != Number(kstart) && Number(end) != Number(kend)) res.data.pipe(dest);
+        //             }
+        //         );
+        //     }else{
+        //         console.log('loadcache')
+        //         let readstream = fs.createReadStream('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
+        //         readstream.on('data', function (chunk) {
+        //             if(exit == true) response.write(chunk);
+        //             else response.end();
+        //         }); 
+        //         readstream.on('end', function () {
+        //             if(exit == true){
+        //                 if(kend < end){
+        //                     kstart = Math.min(kend + 1 , end);
+        //                     kend = Math.min(kstart + CHUNK_SIZE - 1, end);
+        //                     if(kstart != kend) enGine();
+        //                     else response.end();
+        //                 }else response.end();
+        //             }else response.end();  
+        //         }); 
+        //     }
+        // }
+        // enGine();
 
     }else{
         console.log('-----------------');
@@ -206,5 +212,5 @@ if(String(keytemp) === String(keyx)){
     response.write('can key deload');
     response.end();
 }
-}).listen(1000);
+}).listen(2000);
 });
