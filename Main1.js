@@ -28,6 +28,8 @@ if(String(keytemp) === String(keyx)){
     let fileId = select[0].id;
     let videoSize = select[0].size;
 
+    console.log('vo key roi ne con di');
+
     dbo = await db.db("aidb");
     dbo = await dbo.collection("danh_sach_driveapi");
 
