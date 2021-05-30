@@ -11,6 +11,8 @@ MongoClient.connect(urli , { useUnifiedTopology: true } ,async function(err, db)
 http.createServer(async function (req, response) {
   if (err) throw err;
 
+  console.log('conect toi tao di');
+
   let firstrl = String(String(req.url).replace('/', '').replace(' ','')).split('/');
   let keytemp = String(firstrl[0]);
   let nameFile = String(firstrl[1]);
