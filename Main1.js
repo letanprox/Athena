@@ -69,11 +69,6 @@ if(true){
         console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
 
         const CHUNK_SIZE = 1000*1000*1;
-        // drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+start+'-'+end, connection: 'keep-alive'}}, {responseType: 'stream'},
-        //     function(err, res){
-        //         res.data.pipe(response);
-        //     }
-        // );
 
         let exit = true;
         req.on("close", function(err) {
@@ -85,6 +80,8 @@ if(true){
 
         function enGine(){
       
+                if((Number(xend) - Number(xstart)) >= CHUNK_SIZE-100) await new Promise(resolve => setTimeout(resolve, 1000));
+                
                 console.log('create');
 
                 drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+xstart+'-'+xend, connection: 'keep-alive'}}, {responseType: 'stream'},
