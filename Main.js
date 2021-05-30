@@ -149,14 +149,14 @@ if(String(keytemp) === String(keyx)){
         console.log('Range first - '+range);
 
         const CHUNK_SIZE = 1000*1000*1;
-        let xstart = String(range.replace(/\D/g, ""));
+        let xstart = String(parseInt(parts[0], 10));
             xstart = Number(xstart.substring(0,Number(xstart.length)-6));
         let xend = (Number(xstart)+1)
             if(xstart >= 1) xstart = xstart*CHUNK_SIZE+1;
             else xstart == 0;
             xend = xend*CHUNK_SIZE;
     
-        let start = Number(String(range.replace(/\D/g, "")));
+        let start = Number(parseInt(parts[0], 10));
         let end;
         if(xend > (videoSize - CHUNK_SIZE - 1) && xend < videoSize) end = videoSize - 1;
         else end = Math.min(xend, videoSize - 1);
