@@ -199,13 +199,11 @@ if(String(keytemp) === String(keyx)){
     }
 
     }else{
-        response.writeHead(401);
-        response.write('not find resource');
+        response.writeHead(301, {Location: 'https://xemtua.com/'});
         response.end();
     }
 }else{
-    response.writeHead(401);
-    response.write('can key deload');
+    response.writeHead(301, {Location: 'https://xemtua.com/'});
     response.end();
 }
 }).listen(2000);
