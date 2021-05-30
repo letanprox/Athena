@@ -44,7 +44,6 @@ if(String(keytemp) === String(keyx)){
 
     const parts = range.replace(/bytes=/, "").split("-");
     if(parts[1]){
-
         console.log('ios');
         console.log('Range first - '+range);
 
@@ -93,7 +92,7 @@ if(String(keytemp) === String(keyx)){
             if(Number(kstart) != Number(start)){
                 counter = counter + 1;
                 if(counter > 7) await new Promise(resolve => setTimeout(resolve, 4000));
-                else await new Promise(resolve => setTimeout(resolve, 2100));
+                else await new Promise(resolve => setTimeout(resolve, 1900));
             }
 
             let check = false;
