@@ -13,11 +13,9 @@ http.createServer(async function (req, response) {
 
   let firstrl = String(String(req.url).replace('/', '').replace(' ','')).split('/');
   let keytemp = String(firstrl[0]);
-  let nameFile = 'boruto_tap_200.mp4';
+  let nameFile = String(firstrl[1]);
 
-  console.log('conect')
-
-if(true){
+if(String(keytemp) === String(keyx)){
     let dbo = await db.db("roxydb");
         dbo = await dbo.collection("danh_sach_drivelist");
     let query = {name:nameFile};
@@ -42,7 +40,7 @@ if(true){
     let drive = google.drive({version: 'v3', auth:oAuth2Client});
 
     let range = req.headers.range;
-    if(!range) range = 'bytes=0-1';
+    if(!range) range = 'bytes=0-';
 
     const parts = range.replace(/bytes=/, "").split("-");
     if(parts[1]){
@@ -68,50 +66,16 @@ if(true){
 
         console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
 
-        // const CHUNK_SIZE = 1000*1000*1;
-
         let exit = true;
         req.on("close", function(err) {
             exit = false;
         });
 
-        // let xstart = start;
-        // let xend = Math.min(start + CHUNK_SIZE -1, end);
-
-        // async function enGine(){
-      
-        //         if((Number(xend) - Number(xstart)) >= CHUNK_SIZE-100) await new Promise(resolve => setTimeout(resolve, 1000));
-                
-        //         console.log('create');
-
-        //         drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+xstart+'-'+xend, connection: 'keep-alive'}}, {responseType: 'stream'},
-        //             function(err, res){
-        //                 res.data.on('data', function(chunk){
-        //                     if(exit == true) response.write(chunk);
-        //                     else response.end();
-        //                 });
-        //                 res.data.on('end', function(){
-        //                     if(exit == true){
-        //                         if(xend < end){
-        //                             xstart = Math.min(xend + 1 , end);
-        //                             xend = Math.min(xstart + CHUNK_SIZE -1, end);
-        //                             if(xstart != xend) enGine();
-        //                             else response.end();
-        //                         }else response.end();
-        //                     }else response.end();                    
-        //                 });                    
-        //             }
-        //         );
-            
-        // }
-        // enGine();
-
-
         const CHUNK_SIZE = 1000*1000*1;
         let xstart;
         let kstart;
         let kend;
-        
+
         if(!range.includes('=0-1')){
             xstart = String(start);
             xstart = Number(xstart.substring(0,Number(xstart.length)-6));
@@ -126,7 +90,8 @@ if(true){
             kend = 1;
         }
  
-        function enGine(){
+        async function enGine(){
+            if((Number(kend) - Number(kstart)) >= CHUNK_SIZE-10) await new Promise(resolve => setTimeout(resolve, 1000));
             let check = false;
             if (fs.existsSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend)){
               let filesize = fs.statSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
@@ -184,14 +149,14 @@ if(true){
         console.log('Range first - '+range);
 
         const CHUNK_SIZE = 1000*1000*1;
-        let xstart = String(range.replace(/\D/g, ""));
+        let xstart = String(parseInt(parts[0], 10));
             xstart = Number(xstart.substring(0,Number(xstart.length)-6));
         let xend = (Number(xstart)+1)
             if(xstart >= 1) xstart = xstart*CHUNK_SIZE+1;
             else xstart == 0;
             xend = xend*CHUNK_SIZE;
     
-        let start = Number(String(range.replace(/\D/g, "")));
+        let start = Number(parseInt(parts[0], 10));
         let end;
         if(xend > (videoSize - CHUNK_SIZE - 1) && xend < videoSize) end = videoSize - 1;
         else end = Math.min(xend, videoSize - 1);
@@ -242,5 +207,5 @@ if(true){
     response.write('can key deload');
     response.end();
 }
-}).listen(2000);
+}).listen(1000);
 });
