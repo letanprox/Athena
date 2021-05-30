@@ -46,6 +46,7 @@ if(String(keytemp) === String(keyx)){
         });
     let drive = google.drive({version: 'v3', auth:oAuth2Client});
 
+    console.log(req.headers.range)
     let range = req.headers.range;
     if(!range) range = 'bytes=0-';
 
