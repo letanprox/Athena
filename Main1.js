@@ -66,16 +66,45 @@ if(String(keytemp) === String(keyx)){
 
         console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
 
-        drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+start+'-'+end, connection: 'keep-alive'}}, {responseType: 'stream'},
-            function(err, res){
-                res.data.pipe(response);
-            }
-        );
+        // drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+start+'-'+end, connection: 'keep-alive'}}, {responseType: 'stream'},
+        //     function(err, res){
+        //         res.data.pipe(response);
+        //     }
+        // );
 
-        // let exit = true;
-        // req.on("close", function(err) {
-        //     exit = false;
-        // });
+        let exit = true;
+        req.on("close", function(err) {
+            exit = false;
+        });
+
+        let xstart = start;
+        let xend = Math.min(start + CHUNK_SIZE -1, end);
+
+
+            if(check == false){
+                console.log('create');
+
+                drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+xstart+'-'+xend, connection: 'keep-alive'}}, {responseType: 'stream'},
+                    function(err, res){
+                        res.data.on('data', function(chunk){
+                            if(exit == true) response.write(chunk);
+                            else response.end();
+                        });
+                        res.data.on('end', function(){
+                            if(exit == true){
+                                if(xend < end){
+                                    xstart = Math.min(xend + 1 , end);
+                                    xend = Math.min(xstart + CHUNK_SIZE -1, end);
+                                    if(xstart != xend) enGine();
+                                    else response.end();
+                                }else response.end();
+                            }else response.end();                    
+                        });                    
+                    }
+                );
+            }
+
+
 
         // const CHUNK_SIZE = 1000*1000*1;
         // let xstart;
