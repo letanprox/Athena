@@ -84,7 +84,7 @@ if(String(keytemp) === String(keyx)){
         let xend = Math.min(start + CHUNK_SIZE -1, end);
 
 
-            if(check == false){
+      
                 console.log('create');
 
                 drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+xstart+'-'+xend, connection: 'keep-alive'}}, {responseType: 'stream'},
@@ -105,7 +105,7 @@ if(String(keytemp) === String(keyx)){
                         });                    
                     }
                 );
-            }
+            
 
 
 
