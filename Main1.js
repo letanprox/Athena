@@ -68,6 +68,7 @@ if(String(keytemp) === String(keyx)){
             "Accept-Ranges": "bytes",
             "Content-Length": contentLength,
             "Content-Type": "video/mp4",
+            "Connection": "Keep-Alive"
         });
 
         console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
