@@ -83,7 +83,7 @@ if(String(keytemp) === String(keyx)){
         let xstart = start;
         let xend = Math.min(start + CHUNK_SIZE -1, end);
 
-
+        function enGine(){
       
                 console.log('create');
 
@@ -106,7 +106,8 @@ if(String(keytemp) === String(keyx)){
                     }
                 );
             
-
+        }
+        enGine();
 
 
         // const CHUNK_SIZE = 1000*1000*1;
