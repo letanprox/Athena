@@ -40,7 +40,7 @@ if(String(keytemp) === String(keyx)){
     let drive = google.drive({version: 'v3', auth:oAuth2Client});
 
     let range = req.headers.range;
-    if(!range) range = 'bytes=0-';
+    if(!range) range = 'bytes=0-1';
 
     const parts = range.replace(/bytes=/, "").split("-");
     if(parts[1]){
@@ -62,6 +62,7 @@ if(String(keytemp) === String(keyx)){
             "Accept-Ranges": "bytes",
             "Content-Length": contentLength,
             "Content-Type": "video/mp4",
+            "Connection": "Keep-Alive"
         });
 
         console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
