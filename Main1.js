@@ -17,7 +17,7 @@ http.createServer(async function (req, response) {
 
   console.log('conect')
 
-if(String(keytemp) === String(keyx)){
+if(true){
     let dbo = await db.db("roxydb");
         dbo = await dbo.collection("danh_sach_drivelist");
     let query = {name:nameFile};
@@ -42,7 +42,7 @@ if(String(keytemp) === String(keyx)){
     let drive = google.drive({version: 'v3', auth:oAuth2Client});
 
     let range = req.headers.range;
-    if(!range) range = 'bytes=0-';
+    if(!range) range = 'bytes=0-1';
 
     const parts = range.replace(/bytes=/, "").split("-");
     if(parts[1]){
