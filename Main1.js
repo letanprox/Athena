@@ -78,7 +78,7 @@ if(true){
         let xstart = start;
         let xend = Math.min(start + CHUNK_SIZE -1, end);
 
-        function enGine(){
+        async function enGine(){
       
                 if((Number(xend) - Number(xstart)) >= CHUNK_SIZE-100) await new Promise(resolve => setTimeout(resolve, 1000));
                 
