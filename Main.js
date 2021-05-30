@@ -76,7 +76,7 @@ if(String(keytemp) === String(keyx)){
         let kstart;
         let kend;
 
-        if(!range.includes('=0-1')){
+        if(!range.includes('=0-1') || Number(end) > 1){
             xstart = String(start);
             xstart = Number(xstart.substring(0,Number(xstart.length)-6));
             xstart = (xstart+1)*CHUNK_SIZE;
@@ -91,7 +91,7 @@ if(String(keytemp) === String(keyx)){
         }
  
         async function enGine(){
-            if((Number(kend) - Number(kstart)) >= CHUNK_SIZE-10) await new Promise(resolve => setTimeout(resolve, 1000));
+            if(Number(kstart) != Number(start)) if((Number(kend) - Number(kstart)) >= CHUNK_SIZE-10) await new Promise(resolve => setTimeout(resolve, 1700));
             let check = false;
             if (fs.existsSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend)){
               let filesize = fs.statSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
