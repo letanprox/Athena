@@ -113,6 +113,7 @@ if(String(keytemp) === String(keyx)){
                 drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+kstart+'-'+kend, connection: 'keep-alive'}}, {responseType: 'stream'},
                     function(err, res){
                         res.data.on('data', function(chunk){
+                            console.log(chunk)
                             if(exit == true) response.write(chunk);
                             else response.end();
                         });
