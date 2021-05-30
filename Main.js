@@ -45,7 +45,6 @@ if(String(keytemp) === String(keyx)){
     const parts = range.replace(/bytes=/, "").split("-");
     if(parts[1]){
 
-        console.log('-----------------');
         console.log('ios');
         console.log('Range first - '+range);
 
@@ -64,8 +63,6 @@ if(String(keytemp) === String(keyx)){
             "Content-Type": "video/mp4",
             "Connection": "Keep-Alive"
         });
-
-        console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
 
         let exit = true;
         req.on("close", function(err) {
@@ -95,8 +92,8 @@ if(String(keytemp) === String(keyx)){
         async function enGine(){
             if(Number(kstart) != Number(start)){
                 counter = counter + 1;
-                if(counter > 7) await new Promise(resolve => setTimeout(resolve, 4000));
-                else await new Promise(resolve => setTimeout(resolve, 2700));
+                if(counter > 9) await new Promise(resolve => setTimeout(resolve, 3100));
+                else await new Promise(resolve => setTimeout(resolve, 2500));
             }
 
             let check = false;
@@ -106,7 +103,7 @@ if(String(keytemp) === String(keyx)){
             } 
 
             if(check == false){
-                console.log('create');
+                console.log('create ' + nameFile);
                 let dest;
                 if(Number(start) != Number(kstart) && Number(end) != Number(kend)) dest = fs.createWriteStream('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
                 
@@ -130,7 +127,7 @@ if(String(keytemp) === String(keyx)){
                     }
                 );
             }else{
-                console.log('loadcache')
+                console.log('loadcache ' + nameFile)
                 let readstream = fs.createReadStream('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
                 readstream.on('data', function (chunk) {
                     if(exit == true) response.write(chunk);
@@ -151,7 +148,6 @@ if(String(keytemp) === String(keyx)){
         enGine();
 
     }else{
-        console.log('-----------------');
         console.log('android');
         console.log('Range first - '+range);
 
@@ -179,8 +175,6 @@ if(String(keytemp) === String(keyx)){
         'Access-Control-Allow-Headers': '*',
         'Access-Control-Expose-Headers': '*',
         });
-    
-        console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
     
         let check = false;
         if (fs.existsSync('Cache/'+nameFile+'Range' + 'bytes='+start+'-'+end) && (Number(start) == Number(xstart))){
