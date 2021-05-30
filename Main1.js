@@ -49,7 +49,7 @@ if(String(keytemp) === String(keyx)){
     console.log(req.headers)
 
     let range = req.headers.range;
-    if(!range) range = 'bytes=0-';
+    if(!range) range = 'bytes=0-1';
 
     const parts = range.replace(/bytes=/, "").split("-");
     if(parts[1]){
