@@ -45,7 +45,6 @@ if(String(keytemp) === String(keyx)){
     const parts = range.replace(/bytes=/, "").split("-");
     if(parts[1]){
 
-        console.log('-----------------');
         console.log('ios');
         console.log('Range first - '+range);
 
@@ -65,8 +64,6 @@ if(String(keytemp) === String(keyx)){
             "Connection": "Keep-Alive"
         });
 
-        console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
-
         let exit = true;
         req.on("close", function(err) {
             exit = false;
@@ -76,6 +73,7 @@ if(String(keytemp) === String(keyx)){
         let xstart;
         let kstart;
         let kend;
+        let counter = 0;
 
         if(!range.includes('=0-1') || Number(end) > 1){
             xstart = String(start);
@@ -92,7 +90,12 @@ if(String(keytemp) === String(keyx)){
         }
  
         async function enGine(){
-            if(Number(kstart) != Number(start)) if((Number(kend) - Number(kstart)) >= CHUNK_SIZE-10) await new Promise(resolve => setTimeout(resolve, 1500));
+            if(Number(kstart) != Number(start)){
+                counter = counter + 1;
+                if(counter > 7) await new Promise(resolve => setTimeout(resolve, 4000));
+                else await new Promise(resolve => setTimeout(resolve, 2100));
+            }
+
             let check = false;
             if (fs.existsSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend)){
               let filesize = fs.statSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
@@ -100,7 +103,7 @@ if(String(keytemp) === String(keyx)){
             } 
 
             if(check == false){
-                console.log('create');
+                console.log('create ' + nameFile);
                 let dest;
                 if(Number(start) != Number(kstart) && Number(end) != Number(kend)) dest = fs.createWriteStream('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
                 
@@ -124,7 +127,7 @@ if(String(keytemp) === String(keyx)){
                     }
                 );
             }else{
-                console.log('loadcache')
+                console.log('loadcache ' + nameFile)
                 let readstream = fs.createReadStream('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
                 readstream.on('data', function (chunk) {
                     if(exit == true) response.write(chunk);
@@ -145,7 +148,6 @@ if(String(keytemp) === String(keyx)){
         enGine();
 
     }else{
-        console.log('-----------------');
         console.log('android');
         console.log('Range first - '+range);
 
@@ -173,8 +175,6 @@ if(String(keytemp) === String(keyx)){
         'Access-Control-Allow-Headers': '*',
         'Access-Control-Expose-Headers': '*',
         });
-    
-        console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
     
         let check = false;
         if (fs.existsSync('Cache/'+nameFile+'Range' + 'bytes='+start+'-'+end) && (Number(start) == Number(xstart))){
@@ -208,5 +208,5 @@ if(String(keytemp) === String(keyx)){
     response.write('can key deload');
     response.end();
 }
-}).listen(2000);
+}).listen(1000);
 });
