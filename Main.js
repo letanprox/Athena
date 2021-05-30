@@ -68,9 +68,7 @@ if(String(keytemp) === String(keyx)){
 
         let exit = true;
         req.on("close", function(err) {
-            // setTimeout(function(){
-            //     exit = false;
-            // },2000)
+            exit = false;
         });
 
         const CHUNK_SIZE = 1000*1000*1;
