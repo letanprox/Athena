@@ -98,7 +98,7 @@ if(String(keytemp) === String(keyx)){
         }
  
         async function enGine(){
-            if((Number(kend) - Number(kstart)) >= CHUNK_SIZE-10) await new Promise(resolve => setTimeout(resolve, 1000));
+            if(Number(kstart) != Number(start)) if((Number(kend) - Number(kstart)) >= CHUNK_SIZE-10) await new Promise(resolve => setTimeout(resolve, 1000));
             let check = false;
             if (fs.existsSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend)){
               let filesize = fs.statSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
