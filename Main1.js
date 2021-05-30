@@ -12,10 +12,13 @@ http.createServer(async function (req, response) {
   if (err) throw err;
 
   console.log('conect toi tao di');
+  console.log(req.url);
 
   let firstrl = String(String(req.url).replace('/', '').replace(' ','')).split('/');
   let keytemp = String(firstrl[0]);
   let nameFile = String(firstrl[1]);
+
+
 
 if(String(keytemp) === String(keyx)){
     let dbo = await db.db("roxydb");
