@@ -92,7 +92,7 @@ if(String(keytemp) === String(keyx)){
         }
  
         async function enGine(){
-            if(Number(kstart) != Number(start)) await new Promise(resolve => setTimeout(resolve, 2700));
+            if(Number(kstart) != Number(start)) await new Promise(resolve => setTimeout(resolve, 4000));
             let check = false;
             if (fs.existsSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend)){
               let filesize = fs.statSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
