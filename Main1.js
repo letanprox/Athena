@@ -66,6 +66,7 @@ if(String(keytemp) === String(keyx)){
 
         console.log(nameFile+' ^ Range' + 'bytes='+start+'-'+end);
 
+        const CHUNK_SIZE = 1000*1000*1;
         // drive.files.get({fileId: fileId, alt: 'media',headers:{'Range': 'bytes='+start+'-'+end, connection: 'keep-alive'}}, {responseType: 'stream'},
         //     function(err, res){
         //         res.data.pipe(response);
