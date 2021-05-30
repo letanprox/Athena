@@ -71,7 +71,7 @@ if(String(keytemp) === String(keyx)){
             exit = false;
         });
 
-        const CHUNK_SIZE = 1000*1000*1;
+        const CHUNK_SIZE = 1000*1000*2;
         let xstart;
         let kstart;
         let kend;
