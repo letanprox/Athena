@@ -86,9 +86,6 @@ if(String(keytemp) === String(keyx)){
         let exit = true;
         req.on("close", function(err) {
             exit = false;
-            setTimeout(function(){
-                exit = false;
-            },1000)
         });
         req.on("end", function() {
             exit = false;
@@ -98,8 +95,8 @@ if(String(keytemp) === String(keyx)){
             if(Number(kstart) != Number(start)){
                 counter = counter + 1;
                 if(counter < 7) await new Promise(resolve => setTimeout(resolve, 1900));
-                else if(counter >= 7 && counter < 23) await new Promise(resolve => setTimeout(resolve, 2900));
-                else if(counter >= 23 && counter < 33) await new Promise(resolve => setTimeout(resolve, 3900));
+                else if(counter >= 7 && counter < 14) await new Promise(resolve => setTimeout(resolve, 2900));
+                else if(counter >= 14 && counter < 21) await new Promise(resolve => setTimeout(resolve, 3900));
                 else exit = false;
             }
 
