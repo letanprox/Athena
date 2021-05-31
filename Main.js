@@ -90,7 +90,10 @@ if(String(keytemp) === String(keyx)){
                 exit = false;
             },1000)
         });
- 
+        req.on("end", function() {
+            exit = false;
+        });
+
         async function enGine(){
             if(Number(kstart) != Number(start)){
                 counter = counter + 1;
