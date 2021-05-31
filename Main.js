@@ -86,6 +86,7 @@ if(String(keytemp) === String(keyx)){
         let exit = true;
         req.on("close", function(err) {
             exit = false;
+            console.log('Đã đóng'+nameFile)
         });
         req.on("end", function() {
             exit = false;
