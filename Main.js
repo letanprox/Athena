@@ -88,9 +88,6 @@ if(String(keytemp) === String(keyx)){
             exit = false;
             console.log('Đã đóng'+nameFile)
         });
-        req.on("end", function() {
-            exit = false;
-        });
 
         async function enGine(){
             if(Number(kstart) != Number(start)){
