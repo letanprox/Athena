@@ -44,7 +44,6 @@ if(String(keytemp) === String(keyx)){
 
     const parts = range.replace(/bytes=/, "").split("-");
     if(parts[1]){
-
         console.log('ios');
         console.log('Range first - '+range);
 
@@ -62,11 +61,6 @@ if(String(keytemp) === String(keyx)){
             "Content-Length": contentLength,
             "Content-Type": "video/mp4",
             "Connection": "Keep-Alive"
-        });
-
-        let exit = true;
-        req.on("close", function(err) {
-            exit = false;
         });
 
         const CHUNK_SIZE = 1000*1000*1;
@@ -88,12 +82,20 @@ if(String(keytemp) === String(keyx)){
             kstart = 0;
             kend = 1;
         }
+
+        let exit = true;
+        req.on("close", function(err) {
+            exit = false;
+            setTimeout(function(){
+                exit = false;
+            },1000)
+        });
  
         async function enGine(){
             if(Number(kstart) != Number(start)){
                 counter = counter + 1;
-                if(counter > 7) await new Promise(resolve => setTimeout(resolve, 4000));
-                else await new Promise(resolve => setTimeout(resolve, 2100));
+                if(counter > 7) await new Promise(resolve => setTimeout(resolve, 4300));
+                else await new Promise(resolve => setTimeout(resolve, 1900));
             }
 
             let check = false;
@@ -206,5 +208,5 @@ if(String(keytemp) === String(keyx)){
     response.writeHead(301, {Location: 'https://xemtua.com/'});
     response.end();
 }
-}).listen(2000);
+}).listen(1000);
 });

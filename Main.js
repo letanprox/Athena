@@ -152,6 +152,7 @@ if(String(keytemp) === String(keyx)){
     }else{
         console.log('android');
         console.log('Range first - '+range);
+        console.log('adr - '+nameFile);
 
         const CHUNK_SIZE = 1000*1000*1;
         let xstart = String(parseInt(parts[0], 10));
