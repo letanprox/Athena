@@ -92,15 +92,15 @@ if(String(keytemp) === String(keyx)){
         });
 
         async function enGine(){
+            let check = false;
             if(Number(kstart) != Number(start)){
                 counter = counter + 1;
-                if(counter < 7) await new Promise(resolve => setTimeout(resolve, 1000));
+                if(counter < 7) check = false;
                 else if(counter >= 7 && counter < 17) await new Promise(resolve => setTimeout(resolve, 2500));
                 else if(counter >= 17 && counter < 27) await new Promise(resolve => setTimeout(resolve, 3500));
                 else exit = false;
             }
 
-            let check = false;
             if (fs.existsSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend)){
               let filesize = fs.statSync('Cache/'+nameFile+'Range' + 'bytes='+kstart+'-'+kend);
               if(Number(filesize.size) >= CHUNK_SIZE - 2 && Number(filesize.size) <= CHUNK_SIZE + 2) check = true;
