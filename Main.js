@@ -86,7 +86,9 @@ if(String(keytemp) === String(keyx)){
         let exit = true;
         req.on("close", function(err) {
             exit = false;
-            console.log('Đã đóng'+nameFile)
+        });
+        req.on("end", function() {
+            exit = false;
         });
 
         async function enGine(){
@@ -94,7 +96,7 @@ if(String(keytemp) === String(keyx)){
                 counter = counter + 1;
                 if(counter < 7) await new Promise(resolve => setTimeout(resolve, 1500));
                 else if(counter >= 7 && counter < 17) await new Promise(resolve => setTimeout(resolve, 3000));
-                else if(counter >= 17 && counter < 27) await new Promise(resolve => setTimeout(resolve, 3500));
+                else if(counter >= 17 && counter < 27) await new Promise(resolve => setTimeout(resolve, 3900));
                 else exit = false;
             }
 
