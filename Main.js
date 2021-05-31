@@ -63,11 +63,6 @@ if(String(keytemp) === String(keyx)){
             "Connection": "Keep-Alive"
         });
 
-        let exit = true;
-        req.on("close", function(err) {
-            exit = false;
-        });
-
         const CHUNK_SIZE = 1000*1000*1;
         let xstart;
         let kstart;
@@ -87,6 +82,14 @@ if(String(keytemp) === String(keyx)){
             kstart = 0;
             kend = 1;
         }
+
+        let exit = true;
+        req.on("close", function(err) {
+            exit = false;
+            setTimeout(function(){
+                exit = false;
+            },1000)
+        });
  
         async function enGine(){
             if(Number(kstart) != Number(start)){
