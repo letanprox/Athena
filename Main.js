@@ -63,7 +63,7 @@ if(String(keytemp) === String(keyx)){
             "Connection": "Keep-Alive"
         });
 
-        const CHUNK_SIZE = 1000*1000*0.35;
+        const CHUNK_SIZE = 1000*1000*0.4;
         let xstart;
         let kstart;
         let kend;
@@ -94,8 +94,8 @@ if(String(keytemp) === String(keyx)){
         async function enGine(){
             if(Number(kstart) != Number(start)){
                 counter = counter + 1;
-                if(counter < 17) await new Promise(resolve => setTimeout(resolve, 310));
-                else if(counter >= 17 && counter < 100) await new Promise(resolve => setTimeout(resolve, 1100));
+                if(counter < 10) await new Promise(resolve => setTimeout(resolve, 330));
+                else if(counter >= 10 && counter < 100) await new Promise(resolve => setTimeout(resolve, 1300));
                 else exit = false;
             }
 
