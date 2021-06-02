@@ -94,9 +94,9 @@ if(String(keytemp) === String(keyx)){
         async function enGine(){
             if(Number(kstart) != Number(start)){
                 counter = counter + 1;
-                if(counter < 10) await new Promise(resolve => setTimeout(resolve, 300));
-                else if(counter >= 10 && counter < 50) await new Promise(resolve => setTimeout(resolve, 1000));
-                else if(counter >= 50 && counter < 100) await new Promise(resolve => setTimeout(resolve, 3000));
+                if(counter < 10) await new Promise(resolve => setTimeout(resolve, 330));
+                else if(counter >= 10 && counter < 50) await new Promise(resolve => setTimeout(resolve, 1300));
+                else if(counter >= 50 && counter < 100) await new Promise(resolve => setTimeout(resolve, 3300));
                 else exit = false;
             }
 
