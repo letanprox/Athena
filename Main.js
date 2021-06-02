@@ -95,7 +95,7 @@ if(String(keytemp) === String(keyx)){
             if(Number(kstart) != Number(start)){
                 counter = counter + 1;
                 if(counter < 10) await new Promise(resolve => setTimeout(resolve, 300));
-                else if(counter >= 10 && counter < 100) await new Promise(resolve => setTimeout(resolve, 700));
+                else if(counter >= 10 && counter < 70) await new Promise(resolve => setTimeout(resolve, 900));
                 else exit = false;
             }
 
