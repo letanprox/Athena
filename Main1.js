@@ -16,9 +16,7 @@ http.createServer(async function (req, response) {
   let firstrl = String(String(req.url).replace('/', '').replace(' ','')).split('/');
   let keytemp = String(firstrl[0]);
   let nameFile = String(firstrl[1]);
-
-
-
+  
 if(String(keytemp) === String(keyx)){
     let dbo = await db.db("roxydb");
         dbo = await dbo.collection("danh_sach_drivelist");
