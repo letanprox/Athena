@@ -7,7 +7,7 @@ let urli = "mongodb://localhost:27017/";
 
 const express = require('express')
 const app = express()
-const port = 1000
+const port = 4000
 
 
 MongoClient.connect(urli , { useUnifiedTopology: true } ,async function(err, db) {
