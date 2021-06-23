@@ -98,9 +98,9 @@ app.get('/', async (req, response) => {
         async function enGine(){
             if(Number(kstart) != Number(start)){
                 counter = counter + 1;
-                if(counter < 20) await new Promise(resolve => setTimeout(resolve, 1000));
-                else if(counter >= 20 && counter < 40) await new Promise(resolve => setTimeout(resolve, 2000));
-                else if(counter >= 40 && counter < 100) await new Promise(resolve => setTimeout(resolve, 3000));
+                if(counter < 20) await new Promise(resolve => setTimeout(resolve, 1300));
+                else if(counter >= 20 && counter < 40) await new Promise(resolve => setTimeout(resolve, 3000));
+                else if(counter >= 40 && counter < 100) await new Promise(resolve => setTimeout(resolve, 3900));
                 else exit = false;
             }
 
