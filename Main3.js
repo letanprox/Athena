@@ -12,7 +12,7 @@ const port = 4000
 
 MongoClient.connect(urli , { useUnifiedTopology: true } ,async function(err, db) {
 
-app.get('/', async (req, response) => {
+app.get( async (req, response) => {
 
 
 
